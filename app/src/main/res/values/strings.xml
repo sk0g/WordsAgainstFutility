@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Words Against Futility</string>
+    <string name="next_button_label">Next word</string>
+    <string name="search_button_label">Search online</string>
 </resources>
