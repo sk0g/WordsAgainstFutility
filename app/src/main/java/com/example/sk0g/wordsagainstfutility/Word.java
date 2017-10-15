@@ -1,5 +1,7 @@
 package com.example.sk0g.wordsagainstfutility;
 
+import static java.lang.Math.min;
+
 /**
  * Created by sk0g on 10/15/17.
  */
@@ -30,21 +32,28 @@ public class Word {
      */
 
         String tempWord = lines[0];
-        // Step through the first item, find the gender, discard everything after that
-        for (int i = 1; i < (tempWord.length() - 1); i++) {
-            if (tempWord.charAt(i - 1) == '{' &&
-                    tempWord.charAt(i + 1) == '}') {
-                // German word isolated, place it in fL[0]
-                fixedLines[0] = tempWord.substring(0, i - 2)
+//        // Step through the first item, find the gender, discard everything after that
+//        for (int i = 1; i < (tempWord.length() - 1); i++) {
+//            if (tempWord.charAt(i - 1) == '{' &&
+//                    tempWord.charAt(i + 1) == '}') {
+//                // German word isolated, place it in fL[0]
+//                fixedLines[0] = tempWord.substring(0, i - 2);
+//
+//                // Gender found, place it in fL[1]
+//                fixedLines[1] = Character.toString(tempWord.charAt(i));
+//            }
+//        }
 
-                // Gender found, place it in fL[1]
-                fixedLines[1] = Character.toString(tempWord.charAt(i));
-            }
+        int genderStartingIndex = tempWord.indexOf('{');
+        if (genderStartingIndex != -1) {
+            // if a gender letter was found ('{' occurs in the string)
+            char genderLetter = tempWord.charAt(genderStartingIndex + 1);
+            fixedLines[0] = trimGermanWord(tempWord.substring(0, genderStartingIndex - 1));
+            fixedLines[1] = detectWordGender(genderLetter);
+        } else {
+            // no gender was found, assign entire tempWord string
+            fixedLines[0] = trimGermanWord(tempWord);
         }
-
-        // No gender found, dump entire word
-        if (fixedLines[0] == null) { fixedLines[0] = tempWord; }
-
         // Add translation to fL
         fixedLines[2] = lines[1];
 
@@ -82,6 +91,21 @@ public class Word {
                 return "plural";
             default:
                 return "null";
+        }
+    }
+
+    private static String trimGermanWord(String startingWord) {
+        int indexOfSquareBracket = startingWord.indexOf('[');
+        int indexOfForwardSlash = startingWord.indexOf('/');
+        if (indexOfForwardSlash == -1 && indexOfSquareBracket == -1) {
+            // no illegal characters were found, return entire string
+            return startingWord;
+        } else {
+            // if either variable is a -1/ doesn't occur, it will interfere with the min() step
+            indexOfSquareBracket = (indexOfSquareBracket == -1) ? 1000 : indexOfSquareBracket;
+            indexOfForwardSlash  = (indexOfForwardSlash  == -1) ? 1000 : indexOfForwardSlash;
+            int earlier = min(indexOfForwardSlash, indexOfSquareBracket);
+            return startingWord.substring(0, earlier);
         }
     }
 }
