@@ -20,47 +20,41 @@ public class Word {
         wordType = parsedArray[3];
     }
 
-    private static String[] parseLine(String dictionaryLine) {
-        String[] lines = dictionaryLine.split("\\t");
-        String[] fixedLines = new String[6];
+    private static String getRandomLine() {
 
-    /*  Format of fixedLines:
+        return line;
+    }
+
+    private static String[] parseLine(String dictionaryLine) {
+        String[] line = dictionaryLine.split("\\t");
+        String[] fixedLine = new String[6];
+
+    /*  Format of fixedLine:
      *  0: German Word
      *  1: (nullable) gender
      *  2: English translation
      *  3: word type
      */
 
-        String tempWord = lines[0];
-//        // Step through the first item, find the gender, discard everything after that
-//        for (int i = 1; i < (tempWord.length() - 1); i++) {
-//            if (tempWord.charAt(i - 1) == '{' &&
-//                    tempWord.charAt(i + 1) == '}') {
-//                // German word isolated, place it in fL[0]
-//                fixedLines[0] = tempWord.substring(0, i - 2);
-//
-//                // Gender found, place it in fL[1]
-//                fixedLines[1] = Character.toString(tempWord.charAt(i));
-//            }
-//        }
-
+        String tempWord = line[0];
         int genderStartingIndex = tempWord.indexOf('{');
         if (genderStartingIndex != -1) {
             // if a gender letter was found ('{' occurs in the string)
             char genderLetter = tempWord.charAt(genderStartingIndex + 1);
-            fixedLines[0] = trimGermanWord(tempWord.substring(0, genderStartingIndex - 1));
-            fixedLines[1] = detectWordGender(genderLetter);
+            fixedLine[0] = trimGermanWord(tempWord.substring(0, genderStartingIndex - 1));
+            fixedLine[1] = detectWordGender(genderLetter);
         } else {
             // no gender was found, assign entire tempWord string
-            fixedLines[0] = trimGermanWord(tempWord);
+            fixedLine[0] = trimGermanWord(tempWord);
         }
+
         // Add translation to fL
-        fixedLines[2] = lines[1];
+        fixedLine[2] = line[1];
 
         // Assign type only if the type is not null
-        if (detectWordType(lines[2]) != null) { fixedLines[3] = lines[2]; }
+        if (detectWordType(line[2]) != null) { fixedLine[3] = line[2]; }
 
-        return fixedLines;
+        return fixedLine;
     }
 
     private static String detectWordType(String potentialType) {
@@ -114,7 +108,7 @@ public class Word {
     }
 
     public String getGender() {
-        return gender;
+        return ((gender == null) ? "" : gender);
     }
 
     public String getEnglishTranslation() {
@@ -122,6 +116,6 @@ public class Word {
     }
 
     public String getWordType() {
-        return wordType;
+        return ((wordType == null) ? "" : wordType);
     }
 }
