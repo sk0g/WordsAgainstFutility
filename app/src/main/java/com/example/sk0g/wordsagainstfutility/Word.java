@@ -7,10 +7,10 @@ import static java.lang.Math.min;
  */
 
 public class Word {
-    String germanWord;
-    String gender;
-    String englishTranslation;
-    String wordType;
+    private String germanWord;
+    private String gender;
+    private String englishTranslation;
+    private String wordType;
 
     public Word(String dictionaryLine) {
         String[] parsedArray = parseLine(dictionaryLine);
@@ -107,5 +107,21 @@ public class Word {
             int earlier = min(indexOfForwardSlash, indexOfSquareBracket);
             return startingWord.substring(0, earlier);
         }
+    }
+
+    public String getGermanWord() {
+        return germanWord;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getEnglishTranslation() {
+        return englishTranslation;
+    }
+
+    public String getWordType() {
+        return wordType;
     }
 }
