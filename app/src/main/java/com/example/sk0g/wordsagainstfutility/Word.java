@@ -1,5 +1,12 @@
 package com.example.sk0g.wordsagainstfutility;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Random;
+
+import static com.example.sk0g.wordsagainstfutility.MainActivity.dictionaryPath;
+import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 /**
@@ -12,17 +19,28 @@ public class Word {
     private String englishTranslation;
     private String wordType;
 
+    public String getGermanWord() {
+        return germanWord;
+    }
+
+    public String getGender() {
+        return ((gender == null) ? "" : gender);
+    }
+
+    public String getEnglishTranslation() {
+        return englishTranslation;
+    }
+
+    public String getWordType() {
+        return ((wordType == null) ? "" : wordType);
+    }
+
     public Word(String dictionaryLine) {
         String[] parsedArray = parseLine(dictionaryLine);
         germanWord = parsedArray[0];
         gender = parsedArray[1];
         englishTranslation = parsedArray[2];
         wordType = parsedArray[3];
-    }
-
-    private static String getRandomLine() {
-
-        return line;
     }
 
     private static String[] parseLine(String dictionaryLine) {
@@ -103,19 +121,37 @@ public class Word {
         }
     }
 
-    public String getGermanWord() {
-        return germanWord;
+
+    private static String getRandomLine() throws IOException {
+        RandomAccessFile file = getFile();
+
+        final int readLength = 300;
+        Random r = new Random();
+        long random = r.nextInt();
+        long length = file.length();
+
+        random %= length - readLength;
+        random  = abs(random);
+
+        return (readFromFile(file, random, readLength));
     }
 
-    public String getGender() {
-        return ((gender == null) ? "" : gender);
+    private static RandomAccessFile getFile() throws FileNotFoundException {
+        return new RandomAccessFile(dictionaryPath, "r");
     }
 
-    public String getEnglishTranslation() {
-        return englishTranslation;
-    }
+    private static String readFromFile(RandomAccessFile file, long position, int length) throws IOException {
+        file.seek(position);
+        byte[] mouthful = new byte[length];
+        file.read(mouthful);
+        String result = new String(mouthful);
 
-    public String getWordType() {
-        return ((wordType == null) ? "" : wordType);
+        int firstN  = result.indexOf("\n");
+        int secondN = result.substring(firstN + 1).indexOf("\n");
+
+        result = result.substring((firstN + 1), (firstN + secondN + 1));
+
+        file.close();
+        return result;
     }
 }
