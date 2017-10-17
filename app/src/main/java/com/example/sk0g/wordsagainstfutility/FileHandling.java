@@ -1,7 +1,5 @@
 package com.example.sk0g.wordsagainstfutility;
 
-import android.content.Context;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
@@ -12,30 +10,26 @@ import static java.lang.Math.abs;
  * Created by sk0g on 10/17/17.
  */
 
-public class FileHandling {
-    private Context mContext;
+class FileHandling {
 
-//    public ReadFile(Context context) {
-//        this.mContext = MainActivity.mActivity.getApplicationContext();
-//    }
-
-    public static String getRandomLine() throws IOException {
+    static String getRandomLine() throws IOException {
         FileInputStream fis;
         try {
             fis = new FileInputStream("dictionary.txt");
+
+            int readLength = 300;
+            long length = fis.available();
+
+            Random r = new Random();
+            long random = r.nextInt();
+            random %= length - readLength;
+            random  = abs(random);
+
+            return (readFromInputStream(fis, random, readLength));
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-
-        int readLength = 300;
-        long length = fis.available();
-
-        Random r = new Random();
-        long random = r.nextInt();
-        random %= length - readLength;
-        random  = abs(random);
-
-        return (readFromInputStream(fis, random, readLength));
     }
 
 
