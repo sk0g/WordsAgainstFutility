@@ -1,12 +1,6 @@
 package com.example.sk0g.wordsagainstfutility;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Random;
-
-import static com.example.sk0g.wordsagainstfutility.MainActivity.dictionaryPath;
-import static java.lang.Math.abs;
+import static com.example.sk0g.wordsagainstfutility.FileHandling.getRandomLine;
 import static java.lang.Math.min;
 
 /**
@@ -35,7 +29,8 @@ public class Word {
         return ((wordType == null) ? "" : wordType);
     }
 
-    public Word(String dictionaryLine) {
+    public Word() {
+        String dictionaryLine = getRandomLine();
         String[] parsedArray = parseLine(dictionaryLine);
         germanWord = parsedArray[0];
         gender = parsedArray[1];
@@ -119,39 +114,5 @@ public class Word {
             int earlier = min(indexOfForwardSlash, indexOfSquareBracket);
             return startingWord.substring(0, earlier);
         }
-    }
-
-
-    private static String getRandomLine() throws IOException {
-        RandomAccessFile file = getFile();
-
-        final int readLength = 300;
-        Random r = new Random();
-        long random = r.nextInt();
-        long length = file.length();
-
-        random %= length - readLength;
-        random  = abs(random);
-
-        return (readFromFile(file, random, readLength));
-    }
-
-    private static RandomAccessFile getFile() throws FileNotFoundException {
-        return new RandomAccessFile(dictionaryPath, "r");
-    }
-
-    private static String readFromFile(RandomAccessFile file, long position, int length) throws IOException {
-        file.seek(position);
-        byte[] mouthful = new byte[length];
-        file.read(mouthful);
-        String result = new String(mouthful);
-
-        int firstN  = result.indexOf("\n");
-        int secondN = result.substring(firstN + 1).indexOf("\n");
-
-        result = result.substring((firstN + 1), (firstN + secondN + 1));
-
-        file.close();
-        return result;
     }
 }
