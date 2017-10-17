@@ -5,21 +5,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.sk0g.wordsagainstfutility.MainActivity">
+
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/main_activity_margin"
+        android:layout_marginBottom="@dimen/main_activity_margin"
+        android:layout_marginLeft="@dimen/main_activity_margin"
+        android:layout_marginRight="@dimen/main_activity_margin">
 
-        <Button
-            android:id="@+id/search_online_button"
-            android:layout_width="132dp"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="@string/search_button_label" />
+            android:layout_marginTop="80dp">
 
-        <Button
-            android:id="@+id/next_word_button"
-            android:layout_width="131dp"
+            <TextView
+                android:id="@+id/german_word_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/german_word_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minLines="1"
+                    android:minEms="7"/>
+
+                <TextView
+                    android:id="@+id/german_word_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minLines="1"
+                    android:minEms="7"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/english_translation_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="@string/next_button_label" />
+            android:layout_marginTop="@dimen/main_activity_margin"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/next_word_button"
+                android:layout_width="132dp"
+                android:layout_height="wrap_content"
+                tools:text="@string/next_button_label" />
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/search_online_button"
+                android:layout_width="132dp"
+                android:layout_height="wrap_content"
+                tools:text="@string/search_button_label" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
