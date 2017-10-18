@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import static com.example.sk0g.wordsagainstfutility.FileHandling.getRandomLine;
+
 public class MainActivity extends AppCompatActivity {
 
     private Word mWordInstance;
@@ -33,14 +35,19 @@ public class MainActivity extends AppCompatActivity {
         if (mGermanWord.getText() == null) { displayNextWord(); }
 
         mNextWordButton     = (Button) findViewById(R.id.next_word_button);
+        mNextWordButton.setText(R.string.next_button_label);
         mNextWordButton.setOnClickListener((View v) -> displayNextWord());
 
         mOnlineSearchButton = (Button) findViewById(R.id.search_online_button);
+        mOnlineSearchButton.setText(R.string.search_button_label);
         mOnlineSearchButton.setOnClickListener((View v) -> searchCurrentWord());
     }
 
     private void displayNextWord() {
-        try { mWordInstance = new Word(); }
+        try {
+            String dictionaryLine = getRandomLine(this.getApplicationContext());
+            mWordInstance = new Word(dictionaryLine);
+        }
         catch (IOException e) { e.printStackTrace(); }
 
         mGermanWord.setText(mWordInstance.getGermanWord());

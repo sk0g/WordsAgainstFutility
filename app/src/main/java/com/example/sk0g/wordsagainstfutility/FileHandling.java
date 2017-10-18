@@ -1,7 +1,10 @@
 package com.example.sk0g.wordsagainstfutility;
 
-import java.io.FileInputStream;
+import android.content.Context;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -12,36 +15,26 @@ import static java.lang.Math.abs;
 
 class FileHandling {
 
-    static String getRandomLine() throws IOException {
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream("dictionary.txt");
+    static String getRandomLine(Context context) throws FileNotFoundException, IOException {
 
-            int readLength = 300;
-            long length = fis.available();
+        InputStream dictFile = context.getResources().openRawResource(R.raw.dictionary);
 
-            Random r = new Random();
-            long random = r.nextInt();
-            random %= length - readLength;
-            random  = abs(random);
+        int readLength = 300;
+        long length = dictFile.available();
 
-            return (readFromInputStream(fis, random, readLength));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Random r = new Random();
+        long random = r.nextInt();
+        random %= length - readLength;
+        random  = abs(random);
+
+        return (readFromFile(dictFile, random, readLength));
     }
 
 
-    private static String readFromInputStream(FileInputStream input,
-                                       long offset,
-                                       int length) throws IOException {
-        try { input.skip(offset); }
-        catch (IOException e) { e.printStackTrace(); }
-
+    private static String readFromFile(InputStream file, long position, int length) throws IOException {
+        file.skip(position);
         byte[] mouthful = new byte[length];
-        input.read(mouthful);
-
+        file.read(mouthful);
         String result = new String(mouthful);
 
         int firstN  = result.indexOf("\n");
@@ -49,7 +42,8 @@ class FileHandling {
 
         result = result.substring((firstN + 1), (firstN + secondN + 1));
 
-        input.close();
+        file.close();
+
         return result;
     }
 }

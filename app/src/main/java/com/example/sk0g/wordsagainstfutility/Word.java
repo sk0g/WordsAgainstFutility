@@ -2,7 +2,6 @@ package com.example.sk0g.wordsagainstfutility;
 
 import java.io.IOException;
 
-import static com.example.sk0g.wordsagainstfutility.FileHandling.getRandomLine;
 import static java.lang.Math.min;
 
 /**
@@ -32,8 +31,7 @@ public class Word {
         return ((wordType == null) ? "" : wordType);
     }
 
-    public Word() throws IOException {
-        String dictionaryLine = getRandomLine();
+    public Word(String dictionaryLine) throws IOException {
         String[] parsedArray = parseLine(dictionaryLine);
         germanWord = parsedArray[0];
         gender = parsedArray[1];
